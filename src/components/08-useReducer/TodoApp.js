@@ -27,6 +27,26 @@ export const TodoApp = () => {
       localStorage.setItem('todos', JSON.stringify(todos));
     }, [todos]);
 
+    const handleDelete = (todoId) => {
+      // console.log(todoId);
+
+      // crear la accion
+      const action = {
+        type: 'delete',
+        payload: todoId
+      };
+
+      // dispatch
+      dispatch(action);
+    }
+
+    const handleToggle = (todoId) => {
+      dispatch({ 
+        type: 'toggle',
+        payload: todoId
+      });
+    };
+
     // console.log(description);
 
     const handleSubmit = (e) => {
@@ -42,11 +62,13 @@ export const TodoApp = () => {
         donde: false
       };
 
+      // action to add todo to reducer
       const action = {
         type: 'add',
         payload: newTodo
       }
 
+      // send action to reducer
       dispatch(action);
 
       reset();
@@ -66,9 +88,16 @@ export const TodoApp = () => {
                     key={ todo.id }
                     className='list-group-item'
                   >
-                    <p className='text-center'>{ i + 1}. {todo.desc}</p>
+                    <p 
+                      className={`${todo.done && 'complete'}`}
+                      onClick={ () => handleToggle(todo.id)}
+                    >
+                      { i + 1}. {todo.desc}
+                    </p>
                     <button
-                      className='btn btn-danger'>
+                      className='btn btn-danger'
+                      onClick={() => handleDelete(todo.id)}
+                      >
                       Borrar
                     </button>
                   </li>
